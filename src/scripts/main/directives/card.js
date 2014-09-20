@@ -4,6 +4,7 @@
   angular.module('oxford.directives.card', [])
 
   .directive('oxCard', function() {
+    var cardId = Math.random() * 10;
     return {
       restrict: 'EAC',
       replace: true,

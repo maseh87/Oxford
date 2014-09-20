@@ -26,6 +26,9 @@ angular.module('demo', [
     ]
   };
 
+
+
+
   //mocking data incoming from a server to test the $watch function
   setInterval(function() {
     $timeout(function() {
