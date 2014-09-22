@@ -12,6 +12,7 @@
     var row = document.getElementsByClassName('row');
     var cards = Draggable.create('.card-material');
     var currentElement;
+    var that;
 
     return function(scope, element, attr) {
 
@@ -24,7 +25,9 @@
           onPress: function() {
             startX = this.x;
             startY = this.y;
-            // console.log(cards);
+            that = this;
+            // console.log(this);
+            // console.log(row);
           },
           snap: {
             x: function(endValue) {
@@ -37,16 +40,20 @@
           onDrag: function(e) {
             if(this.hitTest(chart, '100') && this.target._gsDragID !== chart[0]._gsDragID) {
               // console.log(startX, ' y');
-              console.log('Chart hit ', chart);
-              console.log('this ', this);
-              TweenLite.to(chart, 0.5, {x: startX, ease: Power2.easeInOut});
+              console.log('Chart hit ', e);
+              console.log('this ', row);
             }
             if(this.hitTest(row, '50')) {
-              console.log('cards hit ', cards);
+              var mX = row.minX;
+              var mY = row.minY;
+              // TweenLite.to(row, 3, {minX: that.minX, minY: that.minY});
+              this.minY = mY;
+              this.minX = mX;
             }
           },
-          onDragEnd: function() {
-            if(this.hitTest(element)) {
+          onDragEnd: function(e) {
+            if(this.hitTest(chart)) {
+              TweenLite.to(e.target, 0.1, {x: 450 , y: 150, ease: Power2.easeInOut});
               // console.log(this, ' tween');
               // TweenLite.to(element, 0.5, {x: startX, y: startY, ease: Power2.easeInOut});
             }
