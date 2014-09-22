@@ -41,7 +41,7 @@
       template: '<div class="dashboard-content">' +
         '<div ui-view></div>' +
       '</div>',
-      link: function($scope, $element, $attr, navController) {
+      controller: function($scope, $element, $attr, navController) {
 
       }
     };
