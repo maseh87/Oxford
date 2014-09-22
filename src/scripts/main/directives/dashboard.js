@@ -20,7 +20,6 @@
       }
     };
   })
-
   .directive('oxDashboardNav', function() {
     return {
       transclude: true,
