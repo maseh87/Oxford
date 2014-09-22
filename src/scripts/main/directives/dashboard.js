@@ -20,7 +20,8 @@
       }
     };
   })
-  .directive('oxDashboardNav', function($window) {
+
+  .directive('oxDashboardNav', function() {
     return {
       transclude: true,
       replace: true,
