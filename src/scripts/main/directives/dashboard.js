@@ -20,25 +20,32 @@
       }
     };
   })
+<<<<<<< HEAD
   .directive('oxDashboardNav', function() {
+=======
+  .directive('oxDashboardContent', function() {
+>>>>>>> 3a3bb6d2ecd3224944d701c9b73982608e03f5ca
     return {
       transclude: true,
       replace: true,
       restrict: 'EA',
-      require: '^oxDashboard',
-      template: '<div class="dashboard-nav">' +
-        '<div ng-transclude></div>' +
-      '</div>',
-      link: function($scope, $element, $attr, navController) {
+      scope: true,
+      template:'<div class="dashboard-content">' +
+                '<ox-dashboard-view></ox-dashboard-view>' +
+              '</div>',
+      controller: function($scope) {
+
+      },
+      link: function() {
       }
     };
   })
-  .directive('oxDashboardContent', function() {
+  .directive('oxDashboardView', function() {
     return {
       replace: true,
       require: '^oxDashboard',
       restrict: 'EA',
-      template: '<div class="dashboard-content">' +
+      template: '<div class="dashboard-view">' +
         '<div ui-view></div>' +
       '</div>',
       controller: function($scope, $element, $attr, navController) {
