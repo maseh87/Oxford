@@ -10800,10 +10800,8 @@ body {
   padding: 20px;
   margin: 0;
 }
-@media (min-width: 768px) {
-  .dashboard-view {
-    width: 100%;
-  }
+@media( min-width 768px) {
+  width: 100%;
 }
 .ox-list {
   list-style: none;
@@ -16418,11 +16416,9 @@ a.tool .ox-icon,
   top: 100px;
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 }
-@media (min-width: 768px) {
-  .ox-toolbar.ox-toolbar-left {
-    top: 60px;
-    width: 60px;
-  }
+@media( min-width 768px) {
+  top: 60px;
+  width: 60px;
 }
 .ox-toolbar.ox-toolbar-left .tool {
   display: block;
@@ -16435,14 +16431,12 @@ a.tool .ox-icon,
   animation-fill-mode: forwards;
   -webkit-animation-fill-mode: forwards;
 }
-@media (min-width: 768px) {
-  .ox-toolbar.ox-toolbar-left .tool {
-    animation: toggleTools-back 400ms;
-    -webkit-animation: toggleTools-back 400ms;
-    animation-fill-mode: forwards;
-    -webkit-animation-fill-mode: forwards;
-    width: 60px;
-  }
+@media( min-width 768px) {
+  animation: toggleTools-back 400ms;
+  -webkit-animation: toggleTools-back 400ms;
+  animation-fill-mode: forwards;
+  -webkit-animation-fill-mode: forwards;
+  width: 60px;
 }
 .ox-toolbar.ox-toolbar-left .tool .title {
   opacity: 0;
@@ -16461,11 +16455,9 @@ a.tool .ox-icon,
   top: 100px;
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 }
-@media (min-width: 768px) {
-  .ox-toolbar.ox-toolbar-right {
-    top: 60px;
-    width: 60px;
-  }
+@media( min-width 768px) {
+  top: 60px;
+  width: 60px;
 }
 .ox-toolbar.ox-toolbar-right .tool {
   display: block;
@@ -16474,10 +16466,8 @@ a.tool .ox-icon,
 /* Value Set in keyframes*/
   text-align: center;
 }
-@media (min-width: 768px) {
-  .ox-toolbar.ox-toolbar-right .tool {
-    width: 60px;
-  }
+@media( min-width 768px) {
+  width: 60px;
 }
 .ox-toolbar.ox-toolbar-right .tool .title {
   opacity: 0;
@@ -16492,31 +16482,25 @@ a.tool .ox-icon,
   width: calc(100% - 50px);
   left: 50px;
 }
-@media (min-width: 768px) {
-  .has-ox-toolbar-left .dashboard-view {
-    width: calc(100% - 60px);
-    left: 60px;
-  }
+@media( min-width 768px) {
+  width: calc(100% - 60px);
+  left: 60px;
 }
 .has-ox-toolbar-right.has-ox-toolbar-left .dashboard-view {
   width: calc(100% - 100px);
   left: 50px;
   right: 50px;
 }
-@media (min-width: 768px) {
-  .has-ox-toolbar-right.has-ox-toolbar-left .dashboard-view {
-    width: calc(100% - 120px);
-    left: 60px;
-    right: 60px;
-  }
+@media( min-width 768px) {
+  width: calc(100% - 120px);
+  left: 60px;
+  right: 60px;
 }
 .show-toolbar-left .ox-toolbar-left {
   width: 250px;
 }
-@media (min-width: 768px) {
-  .show-toolbar-left .ox-toolbar-left {
-    width: 250px;
-  }
+@media( min-width 768px) {
+  width: 250px;
 }
 .show-toolbar-left .ox-toolbar-left .tool {
   text-align: left;

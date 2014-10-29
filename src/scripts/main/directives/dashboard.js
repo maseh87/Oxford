@@ -20,11 +20,7 @@
       }
     };
   })
-<<<<<<< HEAD
-  .directive('oxDashboardNav', function() {
-=======
   .directive('oxDashboardContent', function() {
->>>>>>> 3a3bb6d2ecd3224944d701c9b73982608e03f5ca
     return {
       transclude: true,
       replace: true,
@@ -48,7 +44,7 @@
       template: '<div class="dashboard-view">' +
         '<div ui-view></div>' +
       '</div>',
-      controller: function($scope, $element, $attr, navController) {
+      link: function($scope, $element, $attr, navController) {
 
       }
     };
