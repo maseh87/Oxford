@@ -15363,11 +15363,12 @@
   angular.module('oxford.directives.card', [])
 
   .directive('oxCard', function() {
+    var cardId = Math.random() * 10;
     return {
       restrict: 'EAC',
       replace: true,
       transclude: true,
-      template: '<div class="card-material" draggable id="ox">' +
+      template: '<div class="card-material" draggable>' +
         '<div ng-transclude></div>' +
       '</div>',
       link: function(scope, element, attr) {
@@ -15380,7 +15381,7 @@
 
   angular.module('oxford.directives.chart', [])
 
-  .directive('oxChart', ['$timeout', function($timeout) {
+  .directive('oxChart', [function() {
 
     //color patterns for chart coloring
     var patterns = {
@@ -15397,14 +15398,15 @@
       scope: {
         data: '=',
         options: '=',
-        axis: '='
+        axis: '=',
+        chart: '='
       },
       template: '<div draggable class="chart"></div>',
       replace: true,
       link: function(scope, element, attrs) {
-        //assign an id to the chart if it doesn't have one
-        console.log('height & width', element[0].offsetHeight, element[0].offsetWidth);
-        console.log('element  ', element);
+        var chartId;
+        var options = element.attr('options');
+
         //available option to show gridlines for chart
         if(attrs.grid === 'true') {
           scope.grid = {
@@ -15418,10 +15420,6 @@
             show: true
           };
         }
-        //option to zoom in on chart
-        if(attrs.zoom === 'true') {
-          scope.zoom = { zoom: { enabled: true } };
-        }
         //ability to change the color pattern
         if(attrs.pattern) {
           scope.color = {};
@@ -15430,9 +15428,6 @@
           scope.color = {};
           scope.color.pattern = patterns.dark ;
         }
-
-
-        var chartId;
 
         if(element.attr('id')) {
           chartId = element.attr('id');
@@ -15443,54 +15438,52 @@
           chartIdCounter += 1;
         }
 
-        //will be called on click
-        // scope.data.onclick = function(d, elem) {
-        //   console.log(elem.style.fill, ' elem');
-        //   elem.style.fill = '#ce93d8';
-        //   console.log(d, ' d');
-        // };
-
         //generate c3 chart data
         var chartData = {
           bindto: '#' + element.attr('id'),
-          data: scope.data,
+          data: scope[options],
           axis: scope.axis,
-          options: scope.options,
           grid: scope.grid,
           subchart: scope.subchart,
           zoom: scope.zoom,
           color: scope.color,
-          // x: scope.x,
+          x: scope.x,
           size: {
             height: 300,
             width: 950
           }
         };
-        //assign a type of line if undefined
-        chartData.data.type = attrs.chart? attrs.chart : scope.data.type? scope.data.type : 'line';
 
-        //if scope.options are given replace the data with the options data
-        if(scope.options) {
-          Object.keys(scope.options).forEach(function(key) {
-            chartData[key] = scope.options[key];
-          });
+
+        if(!options) {
+          throw 'You must have an options attribute on your chart directive!';
         }
+
         //Reload the chart if the data changes
-        // scope.$watch('data', function(data, prevData) {
-        //   if(chart) {
-        //     chart.load(data);
-        //     if(data.columns.length < prevData.columns.length) {
-        //       chart.unload(['data' + prevData.columns.length]);
-        //     }
-        //   }
-        // });
-        //ran if there are changes to the chart
+        scope.$watch('options', function(data, prevData) {
+          if(chart) {
+            chart.load(data);
+            if(data.columns) {
+              if(data.columns.length < prevData.columns.length) {
+                chart.unload(['options' + prevData.columns.length]);
+              }
+            }
+            if(data.rows) {
+              if(data.rows.length < prevData.rows.length) {
+                chart.unload(['options' + prevData.rows.length]);
+              }
+            }
+          }
+        });
+
+        //run if there are changes to the chart
         var onChartChanged = function(chart) {
           if(chart) {
             scope.data.type = chart;
             chart.load(data);
           }
         };
+
         //watch the chart for any changes
         scope.$watch(function() {
           return attrs.chart;
@@ -15498,110 +15491,7 @@
 
         //Generating the chart
         var chart = c3.generate(chartData);
-
-        //mocking data incoming from a server to test the $watch function
-        setInterval(function() {
-          $timeout(function() {
-            chart.load({
-              rows: [
-                ['data1', 'data2', 'data3'],
-                [20,180,400],
-                [40,150,310],
-                [70,120,470],
-                [50,170,400],
-                [80,200,380]
-              ]
-            });
-          }, 1000);
-          $timeout(function () {
-            chart.load({
-              columns: [
-                ['data1', 130, 120, 150, 140, 160, 150],
-                ['data4', 30, 20, 50, 40, 60, 50],
-              ],
-              unload: ['data2', 'data3'],
-            });
-          }, 2000);
-
-          $timeout(function () {
-            chart.load({
-              rows: [
-                ['data2', 'data3'],
-                [120, 300],
-                [160, 240],
-                [200, 290],
-                [160, 230],
-                [130, 300],
-                [220, 320],
-              ],
-              unload: 'data4',
-            });
-          }, 3000);
-
-          $timeout(function () {
-            chart.load({
-              columns:[
-                ['data4', 30, 20, 50, 40, 60, 50,100,200]
-              ],
-              type: 'bar'
-            });
-          }, 4000);
-
-          $timeout(function () {
-            chart.unload({
-              ids: 'data4'
-            });
-          }, 5000);
-
-          $timeout(function () {
-            chart.load({
-              columns:[
-                ['data2', null, 30, 20, 50, 40, 60, 50]
-              ]
-            });
-          }, 6000);
-
-          $timeout(function () {
-            chart.unload();
-          }, 7000);
-
-          $timeout(function () {
-            chart.load({
-              rows: [
-                ['data4', 'data2', 'data3'],
-                [90, 120, 300],
-                [40, 160, 240],
-                [50, 200, 290],
-                [120, 160, 230],
-                [80, 130, 300],
-                [90, 220, 320],
-              ],
-              type: 'bar'
-            });
-          }, 8000);
-
-          $timeout(function () {
-            chart.load({
-              rows: [
-                ['data5', 'data6'],
-                [190, 420],
-                [140, 460],
-                [150, 500],
-                [220, 460],
-                [180, 430],
-                [190, 520],
-              ],
-              type: 'line'
-            });
-          }, 9000);
-
-          $timeout(function () {
-            chart.unload({
-              ids: ['data2', 'data3']
-            });
-          }, 10000);
-        }, 11000);
-        /////////////////
+        scope.$parent.chart = chart;
       }
     };
   }]);
@@ -15629,7 +15519,7 @@
       }
     };
   })
-  .directive('oxDashboardNav', function($window) {
+  .directive('oxDashboardNav', function() {
     return {
       transclude: true,
       replace: true,
@@ -15650,7 +15540,7 @@
       template: '<div class="dashboard-content">' +
         '<div ui-view></div>' +
       '</div>',
-      link: function($scope, $element, $attr, navController) {
+      controller: function($scope, $element, $attr, navController) {
 
       }
     };
@@ -15666,9 +15556,30 @@
     var gridHeight = 100;
     var startX, startY;
     var bounds = document.getElementsByClassName('dashboard-content');
+    var chart = document.getElementsByClassName('chart');
+    var row = document.getElementsByClassName('row');
+    var cards = Draggable.create('.card-material');
+    var currentElement;
+    var that;
+    function check() {
+      if(this.hitTest(chart, '100') && this.target._gsDragID !== chart[0]._gsDragID) {
+        // console.log(startX, ' y');
+        console.log('Chart hit ', e);
+        console.log('this ', row);
+      }
+      if(this.hitTest(row, '50')) {
+        var mX = row.minX;
+        var mY = row.minY;
+        // TweenLite.to(row, 3, {minX: that.minX, minY: that.minY});
+        this.minY = mY;
+        this.minX = mX;
+      }
+    }
+
     return function(scope, element, attr) {
+
       if(attr.draggable !== 'false') {
-        Draggable.create(element, {
+        currentElement = Draggable.create(element, {
           bounds: bounds,
           type: 'x,y',
           edgeResistance: 0.90,
@@ -15676,6 +15587,9 @@
           onPress: function() {
             startX = this.x;
             startY = this.y;
+            that = this;
+            console.log(angular.element(element));
+            // console.log(row);
           },
           snap: {
             x: function(endValue) {
@@ -15686,14 +15600,12 @@
             }
           },
           onDrag: function(e) {
-            if(this.hitTest(element)) {
-              console.log(this, ' this');
-            }
           },
-          onDragEnd: function() {
-            if(this.hitTest(element, 20)) {
-              console.log('hit');
-              TweenLite.to(element, 0.5, {x: startX, y: startY, ease: Power2.easeInOut});
+          onDragEnd: function(e) {
+            if(this.hitTest(chart, '100')) {
+              TweenLite.to(e.target, 0.1, {x: 0, y: 0, ease: Power2.easeInOut});
+              // console.log(this, ' tween');
+              // TweenLite.to(element, 0.5, {x: startX, y: startY, ease: Power2.easeInOut});
             }
           }
         });
